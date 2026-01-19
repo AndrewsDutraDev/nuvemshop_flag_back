@@ -35,6 +35,48 @@ Servidor em `http://localhost:3000`
 
 ## Exemplos de requests
 
+## Testar com Postman
+
+1) Crie um Environment com:
+- `baseUrl` = `http://localhost:3000`
+- `token` = (deixe vazio)
+
+2) Crie uma request `Login`:
+- Method: `POST`
+- URL: `{{baseUrl}}/auth/login`
+- Body (JSON):
+```json
+{
+  "email": "admin@example.com",
+  "password": "TroqueEssaSenha_123!",
+  "store_id": "store_demo"
+}
+```
+- Na aba **Tests**, salve o token:
+```javascript
+const json = pm.response.json();
+pm.environment.set('token', json.data.token);
+```
+
+3) Crie uma request `Criar Flag`:
+- Method: `POST`
+- URL: `{{baseUrl}}/flags`
+- Header: `Authorization: Bearer {{token}}`
+- Body (JSON): mesmo payload do exemplo abaixo.
+
+4) Crie uma request `Aplicar Flags`:
+- Method: `POST`
+- URL: `{{baseUrl}}/products/123/flags`
+- Header: `Authorization: Bearer {{token}}`
+- Body (JSON):
+```json
+{ "flagIds": ["FLAG_ID"] }
+```
+
+5) Crie uma request `Public Flags` (sem auth):
+- Method: `GET`
+- URL: `{{baseUrl}}/public/store_demo/products/flags?ids=123,456`
+
 ### Login
 
 ```bash
